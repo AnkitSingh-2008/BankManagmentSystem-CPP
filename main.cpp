@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <string>
 using namespace std;
 
@@ -9,11 +8,15 @@ struct Account {
     float balance;
 };
 
-// Global vector to store accounts in memory
-vector<Account> accounts;
+Account accounts[100];   // Fixed size array
+int accountCount = 0;    // Track number of accounts
 
 // Create Account
 void createAccount() {
+    if (accountCount >= 100) {
+        cout << "Account list is full!\n";
+        return;
+    }
     Account acc;
     cout << "Enter Name: ";
     cin.ignore();
@@ -21,16 +24,16 @@ void createAccount() {
     cout << "Enter Account Number: ";
     cin >> acc.accountNumber;
     acc.balance = 0;
-    accounts.push_back(acc);
+    accounts[accountCount++] = acc;
     cout << "Account created successfully!\n";
 }
 
 // Deposit Money
 void deposit(int accNo, float amount) {
     bool found = false;
-    for (auto &acc : accounts) {
-        if (acc.accountNumber == accNo) {
-            acc.balance += amount;
+    for (int i = 0; i < accountCount; i++) {
+        if (accounts[i].accountNumber == accNo) {
+            accounts[i].balance += amount;
             cout << "Deposited " << amount << " successfully\n";
             found = true;
             break;
@@ -42,10 +45,10 @@ void deposit(int accNo, float amount) {
 // Withdraw Money
 void withdraw(int accNo, float amount) {
     bool found = false;
-    for (auto &acc : accounts) {
-        if (acc.accountNumber == accNo) {
-            if (amount <= acc.balance) {
-                acc.balance -= amount;
+    for (int i = 0; i < accountCount; i++) {
+        if (accounts[i].accountNumber == accNo) {
+            if (amount <= accounts[i].balance) {
+                accounts[i].balance -= amount;
                 cout << "Withdrawn " << amount << " successfully\n";
             } else {
                 cout << "Insufficient Balance!\n";
@@ -60,11 +63,11 @@ void withdraw(int accNo, float amount) {
 // Check Balance
 void checkBalance(int accNo) {
     bool found = false;
-    for (auto &acc : accounts) {
-        if (acc.accountNumber == accNo) {
-            cout << "Account Holder: " << acc.name << endl;
-            cout << "Account Number: " << acc.accountNumber << endl;
-            cout << "Current Balance: " << acc.balance << endl;
+    for (int i = 0; i < accountCount; i++) {
+        if (accounts[i].accountNumber == accNo) {
+            cout << "Account Holder: " << accounts[i].name << endl;
+            cout << "Account Number: " << accounts[i].accountNumber << endl;
+            cout << "Current Balance: " << accounts[i].balance << endl;
             found = true;
             break;
         }
